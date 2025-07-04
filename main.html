@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Countdown to 2026 🎉</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(-45deg, #1e3c72, #2a5298, #0f2027, #203a43);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      text-align: center;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      max-width: 700px;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 30px;
+    }
+
+    #countdown {
+      font-size: 2.2rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    #finished {
+      display: none;
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #ffd700;
+      animation: fadeIn 1.5s ease-in forwards;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Countdown to New Year 2026 🎊</h1>
+    <div id="countdown">Loading...</div>
+    <div id="finished">🎉 Happy New Year! 🎉</div>
+  </div>
+
+  <!-- Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Celebration Sound -->
+  <audio id="celebration-sound" preload="auto">
+    <source src="https://www.soundjay.com/human/sounds/applause-01.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const countdownEl = document.getElementById("countdown");
+    const finishedEl = document.getElementById("finished");
+    const sound = document.getElementById("celebration-sound");
+
+    // 🎯 Set your target date/time here
+    const targetDate = new Date("December 31, 2025 23:59:59").getTime();
+    let triggered = false;
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+
+      if (diff <= 0 && !triggered) {
+        countdownEl.style.display = "none";
+        finishedEl.style.display = "block";
+        sound.play();
+        startConfetti();
+        triggered = true;
+        return;
+      }
+
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        countdownEl.textContent = `${days} days ${minutes} minutes ${seconds} seconds left`;
+      }
+    }
+
+    function startConfetti() {
+      const duration = 6 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 6,
+          angle: 60,
+          spread: 70,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 6,
+          angle: 120,
+          spread: 70,
+          origin: { x: 1 }
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
